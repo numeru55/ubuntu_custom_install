@@ -1,3 +1,20 @@
+format_disk:
+	sudo parted /dev/sdb mklabel gpt 
+	sudo parted /dev/sdb mkpart ESP fat32 1MiB 201MiB
+	sudo parted /dev/sdb set 1 esp on 
+	sudo parted /dev/sdb set 1 boot on 
+	sudo parted /dev/sdb mkpart primary ext4 201MiB 100%
+	sudo mkdosfs -F32 -nEFI /dev/sdb1
+	sudo mkfs.ext4 /dev/sdb2
+	mkdir disk
+	sudo mount /dev/sdb1 disk
+	sudo cp -r efi/* disk/
+	sudo umount disk
+	sudo mount /dev/sdb2 disk
+	sudo cp -r root/* disk/
+	sudo umount disk
+	sudo rm -rf disk
+
 all: build
 
 config: clean
