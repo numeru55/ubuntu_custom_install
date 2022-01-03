@@ -6,7 +6,23 @@ config: clean
 	cp config/archives/google.key.chroot config/archives/google.key.binary
 
 build: clean_root
-	sudo debootstrap --arch=amd64 focal root
+	sudo debootstrap --arch=amd64 --variant buildd focal root
+	sudo cp /etc/hosts root/etc/
+	sudo cp /etc/resolv.conf root/etc/
+	sudo cp -p tools/sources.list root/etc/apt/
+	sudo mount --bind /dev root/dev
+	sudo cp tools/chroot_script.sh root/
+	sudo chroot root ./chroot_script.sh
+	sudo rm root/chroot_script.sh
+
+edit:
+	sudo cp /etc/hosts root/etc/
+	sudo cp /etc/resolv.conf root/etc/
+	sudo cp -p tools/sources.list root/etc/apt/
+	sudo mount --bind /dev root/dev
+	sudo cp tools/chroot_script.sh root/
+	sudo chroot root ./chroot_script.sh
+	sudo rm root/chroot_script.sh
 
 refind: clean_efi
 	wget https://sourceforge.net/projects/refind/files/0.13.2/refind-cd-0.13.2.zip/download -O refind-cd-0.13.2.zip
