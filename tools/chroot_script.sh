@@ -1,7 +1,11 @@
+#!/bin/bash
+
+export MY_HOST_NAME="my-focal"
+
 export HOME=/root
 export LC_ALL=C
 
-echo "my-focal" > /etc/hostname
+echo $MY_HOST_NAME > /etc/hostname
 
 # we need to install systemd first, to configure machine id
 apt-get update
@@ -117,5 +121,9 @@ truncate -s 0 /etc/machine-id
 # remove diversion (why??)
 rm /sbin/initctl
 dpkg-divert --rename --remove /sbin/initctl
+
+cat <<EOF >>/etc/hosts
+127.0.1.1 $MY_HOST_NAME
+EOF
 
 rm -rf /tmp/* ~/.bash_history

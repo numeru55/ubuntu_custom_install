@@ -1,4 +1,4 @@
-target_disk=/dev/sdc
+target_disk=/dev/sdb
 
 format_disk:
 	sudo parted $(target_disk) mklabel gpt 
@@ -13,8 +13,8 @@ all: build
 
 build: clean_root
 	sudo debootstrap --arch=amd64 --variant=minbase focal root
-	sudo cp /etc/hosts root/etc/
-	sudo cp /etc/resolv.conf root/etc/
+	# sudo cp /etc/hosts root/etc/
+	# sudo cp /etc/resolv.conf root/etc/
 	sudo cp -p tools/sources.list root/etc/apt/
 	sudo mount --bind /dev root/dev
 	sudo mount --bind /run root/run
