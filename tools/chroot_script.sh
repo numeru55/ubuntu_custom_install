@@ -2,26 +2,27 @@
 
 export MY_HOST_NAME="my-focal"
 
+export TARGET_USER_NAME="ubuntu"
+export TARGET_USER_PASSWORD="custom"
+
 export HOME=/root
 export LC_ALL=C
 
 echo $MY_HOST_NAME > /etc/hostname
 
-# we need to install systemd first, to configure machine id
+export DEBIAN_FRONTEND=noninteractive
+
 apt-get update
 apt-get install -y libterm-readline-gnu-perl systemd-sysv
 
-#configure machine id
 dbus-uuidgen > /etc/machine-id
 ln -fs /etc/machine-id /var/lib/dbus/machine-id
 
-# don't understand why, but multiple sources indicate this
 dpkg-divert --local --rename --add /sbin/initctl
 ln -s /bin/true /sbin/initctl
 
 apt-get -y upgrade
 
-# install live packages
 apt-get install -y \
 sudo \
 ubuntu-standard \
@@ -42,29 +43,16 @@ grub-pc-bin \
 grub2-common \
 locales
 
-# install kernel
 apt-get install -y --no-install-recommends linux-generic
 
-# graphic installer - ubiquity
-#    apt-get install -y \
-#    ubiquity \
-#    ubiquity-casper \
-#    ubiquity-frontend-gtk \
-#    ubiquity-slideshow-ubuntu \
-#    ubiquity-ubuntu-artwork
+adduser --disabled-password --gecos "" $TARGET_USER_NAME
+echo $TARGET_USER_NAME:$TARGET_USER_PASSWORD | chpasswd
+gpasswd -a $TARGET_USER_NAME sudo
 
-# echo "==== Enter for user ubuntu ===="
-    
-# adduser -q --gecos "" ubuntu
-adduser --disabled-password --gecos "" ubuntu
-echo "ubuntu:custom" | chpasswd
-gpasswd -a ubuntu sudo
-    
-dpkg-reconfigure tzdata
-dpkg-reconfigure locales
+dpkg-reconfigure --frontend noninteractive tzdata
+dpkg-reconfigure --frontend noninteractive locales
 dpkg-reconfigure --frontend noninteractive resolvconf
 
-# network manager
 cat <<EOF > /etc/NetworkManager/NetworkManager.conf
 [main]
 rc-manager=resolvconf
@@ -77,7 +65,7 @@ EOF
 
 dpkg-reconfigure network-manager
 
-# customize
+# ==== start customize ====
 
 apt-get install -y ubuntu-gnome-desktop
 
@@ -115,10 +103,18 @@ apt-get autoremove -y
 
 apt-get clean -y
 
-# truncate machine id (why??)
-truncate -s 0 /etc/machine-id
+TIMEZONE="Asia/Tokyo"
+ZONEINFO_FILE="/usr/share/zoneinfo/Asia/Tokyo"
 
-# remove diversion (why??)
+rm -f /etc/localtime
+ln -s "$ZONEINFO_FILE" /etc/localtime
+echo "$TIMEZONE" > /etc/timezone
+
+update-locale LANG=ja_JP.UTF-8
+sed -i 's/# ja_JP.UTF-8 UTF-8/ja_JP.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen --keep-existing
+
+truncate -s 0 /etc/machine-id
 rm /sbin/initctl
 dpkg-divert --rename --remove /sbin/initctl
 

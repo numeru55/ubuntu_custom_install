@@ -1,4 +1,4 @@
-target_disk=/dev/sdb
+target_disk=/dev/sdc
 
 format_disk:
 	sudo parted $(target_disk) mklabel gpt 
@@ -31,6 +31,7 @@ build: clean_root
 	sudo umount root/run
 	( ( sudo blkid -o export $(target_disk)2 | grep -E "^UUID" | sed -z 's/\n//g' ) ; echo " / ext4 defaults 0 0") > tools/fstab
 	sudo cp tools/fstab root/etc/
+	sudo cp tools/keyboard root/etc/default/
 
 edit_start:
 	sudo cp /etc/hosts root/etc/
