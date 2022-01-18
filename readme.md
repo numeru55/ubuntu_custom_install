@@ -1,8 +1,8 @@
 # Thanks to
 
-https://nomunomu.hateblo.jp/entry/2018/10/19/002805
-https://jkbys.net/ubuntu-20-10-%E6%97%A5%E6%9C%AC%E8%AA%9E-remix%E3%81%AE%E4%BD%9C%E6%88%90%E7%94%A8%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88
-https://github.com/mvallim/live-custom-ubuntu-from-scratch
+- https://nomunomu.hateblo.jp/entry/2018/10/19/002805
+- https://jkbys.net/ubuntu-20-10-%E6%97%A5%E6%9C%AC%E8%AA%9E-remix%E3%81%AE%E4%BD%9C%E6%88%90%E7%94%A8%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88
+- https://github.com/mvallim/live-custom-ubuntu-from-scratch
 
 # Overview
 
