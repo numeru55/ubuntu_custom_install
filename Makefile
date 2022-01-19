@@ -1,4 +1,4 @@
-target_disk=/dev/sdc
+target_disk=/dev/sdb
 
 format_disk:
 	sudo parted $(target_disk) mklabel gpt 
@@ -13,31 +13,34 @@ all: build
 
 build: clean_root
 	sudo debootstrap --arch=amd64 --variant=minbase focal root
-	# sudo cp /etc/hosts root/etc/
-	# sudo cp /etc/resolv.conf root/etc/
 	sudo cp -p tools/sources.list root/etc/apt/
 	sudo mount --bind /dev root/dev
 	sudo mount --bind /run root/run
 	sudo chroot root mount none -t proc /proc
 	sudo chroot root mount none -t sysfs /sys
 	sudo chroot root mount none -t devpts /dev/pts
+	sudo chroot root mkdir -p /boot/efi
+	sudo chroot root mount $(target_disk)1 /boot/efi
 	sudo cp tools/chroot_script.sh root/
 	sudo chroot root ./chroot_script.sh
 	sudo rm root/chroot_script.sh
+	sudo chroot root umount /boot/efi
 	sudo chroot root umount /proc
 	sudo chroot root umount /sys
 	sudo chroot root umount /dev/pts
 	sudo umount root/dev
 	sudo umount root/run
 	( ( sudo blkid -o export $(target_disk)2 | grep -E "^UUID" | sed -z 's/\n//g' ) ; echo " / ext4 defaults 0 0") > tools/fstab
+	( ( sudo blkid -o export $(target_disk)1 | grep -E "^UUID" | sed -z 's/\n//g' ) ; echo " /boot/efi auto defaults 0 0") >> tools/fstab
 	sudo cp tools/fstab root/etc/
 	sudo cp tools/keyboard root/etc/default/
 
 edit_start:
-	sudo cp /etc/hosts root/etc/
-	sudo cp /etc/resolv.conf root/etc/
-	sudo cp -p tools/sources.list root/etc/apt/
 	sudo mount --bind /dev root/dev
+	sudo mount --bind /run root/run
+	sudo chroot root mount none -t proc /proc
+	sudo chroot root mount none -t sysfs /sys
+	sudo chroot root mount none -t devpts /dev/pts
 	sudo chroot root
 
 edit_end:

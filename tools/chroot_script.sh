@@ -98,6 +98,8 @@ gnome-sudoku \
 aisleriot \
 hitori
 
+apt-get install -y grub-efi
+
 # remove unused and clean up apt cache
 apt-get autoremove -y
 
@@ -121,5 +123,10 @@ dpkg-divert --rename --remove /sbin/initctl
 cat <<EOF >>/etc/hosts
 127.0.1.1 $MY_HOST_NAME
 EOF
+
+# install grub-efi
+
+grub-install
+update-grub
 
 rm -rf /tmp/* ~/.bash_history

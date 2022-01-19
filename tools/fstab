@@ -1,1 +1,2 @@
-UUID=6fb2a08e-55f4-426a-bdd0-ac9ca3883d91 / ext4 defaults 0 0
+UUID=c49bf4df-f26d-4d76-987e-b6ea6e04a0df / ext4 defaults 0 0
+UUID=BFD1-9B07 /boot/efi auto defaults 0 0
