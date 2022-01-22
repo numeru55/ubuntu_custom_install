@@ -19,7 +19,7 @@ DEVICE WILL BE WIPED WITHOUT ANY WARNING.
 - Specify the target device to `Makefile`.
 - Run `make format_disk` to clean the target device.
 - Run `make build` to install ubuntu 20.04 focal with my favorite setting.
-- Run `make refind` to install rEFInd boot manager.
+- (Option) Run `make refind` to install rEFInd boot manager.
 
 # Customize
 

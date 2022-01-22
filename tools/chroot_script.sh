@@ -36,11 +36,6 @@ resolvconf \
 net-tools \
 wireless-tools \
 wpagui \
-grub-common \
-grub-gfxpayload-lists \
-grub-pc \
-grub-pc-bin \
-grub2-common \
 locales
 
 apt-get install -y --no-install-recommends linux-generic
@@ -85,6 +80,7 @@ apt-get update
 apt-get install -y google-chrome-stable
 apt-get install -y bcmwl-kernel-source
 apt-get install -y emacs
+apt-get install -y vim
     
 # purge
 
