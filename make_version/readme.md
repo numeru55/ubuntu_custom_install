@@ -11,17 +11,19 @@
 
 # WARING
 
-DEVICE WILL BE WIPED WITHOUT WARNING.
+DEVICE WILL BE WIPED WITHOUT ANY WARNING.
 
 # Basic usage
 
 - Unmount all the target device.
-- Run `sudo ./format.sh /dev/sdb` to clean the target device /dev/sdb.
-- Run `sudo ./build.sh /dev/sdb` to install ubuntu 20.04 focal with my favorite setting.
+- Specify the target device to `Makefile`.
+- Run `make format_disk` to clean the target device.
+- Run `make build` to install ubuntu 20.04 focal with my favorite setting.
+- (Option) Run `make refind` to install rEFInd boot manager.
 
 # Customize
 
-- Edit `build.sh` also to modify hostname, user name, packages and so on.
+- Edit `tools/chroot_script.sh` also to modify hostname, user name, packages and so on.
 
 # memos ( in Japanese )
 
