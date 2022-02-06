@@ -26,8 +26,12 @@ parted -s $TARGET_DISK set 1 esp on
 parted -s $TARGET_DISK set 1 boot on 
 parted -s $TARGET_DISK mkpart primary ext4 201MiB 100%
 
-mkfs -t vfat -n EFI ${TARGET_DISK}1
-mkfs -t ext4 -j ${TARGET_DISK}2
+sleep 1s
+
+mkfs.fat -F32 -n EFI ${TARGET_DISK}1
+mkfs.ext4 -F ${TARGET_DISK}2
+
+set +x
 
 echo "===== finished. ====="
 parted $TARGET_DISK p

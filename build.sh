@@ -177,6 +177,10 @@ apt-get install -y google-chrome-stable
 apt-get install -y bcmwl-kernel-source
 apt-get install -y emacs vim bat
 
+apt-add-repository ppa:fish-shell/release-3
+apt-get update
+apt-get install fish
+
 # (option) create user
 
 # echo "Create user" $TARGET_USER_NAME "..."
