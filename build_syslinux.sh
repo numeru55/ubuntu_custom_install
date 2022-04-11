@@ -191,17 +191,15 @@ apt-get install fish
 # echo $TARGET_USER_NAME:$TARGET_USER_PASSWORD | chpasswd
 # gpasswd -a $TARGET_USER_NAME sudo
 
-# grub
-
-echo "Install grub..."
-
-apt-get install -y grub-efi
+apt-get install -y syslinux-efi
+mkdir -p /boot/efi/EFI/BOOT
+cp /usr/lib/SYSLINUX.EFI/efi64/syslinux.efi /boot/efi/EFI/BOOT/bootx64.efi
+cp /usr/lib/syslinux/modules/efi64/ldlinux.e64 /boot/efi/EFI/BOOT/
+cp /boot/vmlinuz /boot/efi/EFI/BOOT/
+cp /boot/initrd.img /boot/efi/EFI/BOOT/
 
 apt-get autoremove -y
 apt-get clean -y
-
-grub-install
-update-grub
 
 umount /boot/efi
 
@@ -252,19 +250,23 @@ echo "${UUID1} /boot/efi auto defaults 0 0" >>fstab
 
 mv fstab root/etc/
 
-# /boot/grub/grub.cfg
-
-log "edit /boot/grub.cfg..."
-
-echo "insmod all_video" >grub.cfg
-echo "set timeout=5" >>grub.cfg
-echo "menuentry 'Ubuntu' {" >>grub.cfg
-echo "  linux   /boot/vmlinuz ro root=${UUID2}" >>grub.cfg
-echo "  initrd  /boot/initrd.img" >>grub.cfg
-echo "}" >>grub.cfg
-
-mv grub.cfg root/boot/grub/
-
 umount root
+
+log "create syslinux.cfg..."
+
+echo "SAY uefi syslinux config" >syslinux.cfg
+echo "PROMPT 1" >>syslinux.cfg
+echo "TIMEOUT 30" >>syslinux.cfg
+echo "DEFAULT linux64" >>syslinux.cfg
+echo " " >>syslinux.cfg
+echo "LABEL linux64" >>syslinux.cfg
+echo "KERNEL /EFI/BOOT/vmlinuz" >>syslinux.cfg
+echo "APPEND ro initrd=/EFI/BOOT/initrd.img root=${UUID2}" >>syslinux.cfg
+
+rm -rf efi
+mkdir efi
+mount ${TARGET_DISK}1 efi
+mv syslinux.cfg efi/EFI/BOOT/
+umount efi
 
 log "Finished script."
